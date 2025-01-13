@@ -5,9 +5,7 @@
  */
 package de.eldoria.schematictools.listener;
 
-import de.eldoria.eldoutilities.messages.MessageChannel;
 import de.eldoria.eldoutilities.messages.MessageSender;
-import de.eldoria.eldoutilities.messages.MessageType;
 import de.eldoria.schematicbrush.event.PostPasteEvent;
 import de.eldoria.schematicbrush.event.PrePasteEvent;
 import de.eldoria.schematictools.configuration.Configuration;
@@ -43,7 +41,7 @@ public class BrushPasteListener implements Listener {
 
         if (toolMeta.usages() >= tool.usages()) {
             event.setCancelled(true);
-            messageSender.send(MessageChannel.ACTION_BAR, MessageType.ERROR, player, "The usages of your brush tool are exhausted.");
+            messageSender.sendErrorActionBar(player, "The usages of your brush tool are exhausted.");
             toolMeta.updateUsage(tool);
             if (configuration.toolRemoval().isRemoveUsed()) {
                 plugin.getServer().getScheduler().runTask(plugin,
@@ -67,7 +65,7 @@ public class BrushPasteListener implements Listener {
         toolMeta.updateUsage(tool);
 
         if (tool.hasUsage() && toolMeta.usages() >= tool.usages()) {
-            messageSender.send(MessageChannel.ACTION_BAR, MessageType.ERROR, player, "The usages of your brush tool are exhausted.");
+            messageSender.sendErrorActionBar(player, "The usages of your brush tool are exhausted.");
             if (configuration.toolRemoval().isRemoveUsed()) {
                 plugin.getServer().getScheduler().runTask(plugin,
                         () -> SchematicTool.getPlayerItem(player).setAmount(0));

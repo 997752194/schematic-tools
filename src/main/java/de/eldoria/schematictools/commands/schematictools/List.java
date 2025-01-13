@@ -49,14 +49,14 @@ public class List extends AdvancedCommand implements IPlayerTabExecutor {
         var index = args.asInt(0, 0);
         var tools = configuration.tools();
         var composer = MessageComposer.create();
-        addPageHeader(composer, "Tools");
+        addPageHeader(composer, "words.tools");
         addEntries(composer, tools.page(0, PAGE_SIZE), Tool::asListComponent);
         addPageFooter(composer, index, tools);
         send(composer, player);
     }
 
     protected void addPageHeader(MessageComposer composer, String title) {
-        composer.text("<%s>%s", Colors.HEADING, title).newLine();
+        composer.text("<%s>", Colors.HEADING).localeCode(title).newLine();
     }
 
     protected <T> void addEntries(MessageComposer composer, java.util.List<T> entries, Function<T, String> map) {

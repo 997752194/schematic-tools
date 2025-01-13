@@ -39,17 +39,17 @@ public class Bind extends AdvancedCommand implements IPlayerTabExecutor {
     @Override
     public void onCommand(@NotNull Player player, @NotNull String alias, @NotNull Arguments args) throws CommandException {
         var hand = player.getInventory().getItemInMainHand();
-        CommandAssertions.isFalse(hand.getType() == Material.AIR, "Hold the item in your hand.");
+        CommandAssertions.isFalse(hand.getType() == Material.AIR, "error.noiteminhand");
 
-        CommandAssertions.isTrue(WorldEditBrush.canBeBound(hand), "No brush can be bound to this item.");
+        CommandAssertions.isTrue(WorldEditBrush.canBeBound(hand), "error.cannotbind");
 
         var byName = configuration.tools().byName(args.get(0).asString());
-        CommandAssertions.isTrue(byName.isPresent(), "Tool not found.");
+        CommandAssertions.isTrue(byName.isPresent(), "error.toolnotfound");
 
 
         SchematicTool.initTool(hand, byName.get());
 
-        messageSender().sendMessage(player, "Tool bound.");
+        messageSender().sendMessage(player, "commands.bind.bound");
     }
 
     @Override

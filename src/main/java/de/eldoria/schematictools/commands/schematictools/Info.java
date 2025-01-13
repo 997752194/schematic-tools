@@ -51,13 +51,13 @@ public class Info extends AdvancedCommand implements IPlayerTabExecutor {
         if (args.isEmpty()) {
             CommandAssertions.permission(player, false, Permissions.Info.CURRENT);
             var optToolMeta = SchematicTool.getCurrentTool(player);
-            CommandAssertions.isTrue(optToolMeta.isPresent(), "Please hold a schematic tool in your hand or enter a name.");
+            CommandAssertions.isTrue(optToolMeta.isPresent(), "error.notoolinhand");
             var optTool = configuration.tools().byId(optToolMeta.get().id());
             tool = optTool.get();
         } else {
             CommandAssertions.permission(player, false, Permissions.Info.ALL);
             var optTool = configuration.tools().byName(args.asString(0));
-            CommandAssertions.isTrue(optTool.isPresent(), "Unkown tool name.");
+            CommandAssertions.isTrue(optTool.isPresent(), "error.unknowntoolname");
             tool = optTool.get();
         }
 
@@ -74,7 +74,9 @@ public class Info extends AdvancedCommand implements IPlayerTabExecutor {
             composer.text(tool.asInfoComponent());
         }
         if (player.hasPermission(Permissions.Info.ALL)) {
-            composer.newLine().text("<click:run_command:'/schematictools list'><%s>[Back]</click>", Colors.CHANGE);
+            composer.newLine().text("<click:run_command:'/schematictools list'><%s>[", Colors.CHANGE)
+                    .localeCode("words.back")
+                    .text("]</click>");
         }
 
         messageBlocker.ifEnabled(() -> composer.newLine().text("<click:run_command:'/schematictools chatblock false'><%s>[x]</click>", Colors.REMOVE));

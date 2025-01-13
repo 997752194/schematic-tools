@@ -1,16 +1,15 @@
-import de.chojo.Repo
-
 plugins {
-    id("com.diffplug.spotless") version "6.18.0"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("de.chojo.publishdata") version "1.2.4"
-    id("net.minecrell.plugin-yml.bukkit") version "0.5.3"
+    id("com.diffplug.spotless") version "7.0.1"
+    id("com.gradleup.shadow") version "8.3.5"
+    id("de.chojo.publishdata") version "1.4.0"
+    id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
+    id("xyz.jpenilla.run-paper") version "2.3.1"
     java
     `maven-publish`
 }
 
 group = "de.eldoria"
-version = "1.1.0"
+version = "1.1.1"
 
 repositories {
     maven("https://eldonexus.de/repository/maven-public/")
@@ -18,12 +17,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("de.eldoria", "schematicbrushreborn-api", "2.5.0")
+    compileOnly("de.eldoria", "schematicbrushreborn-api", "2.7.3")
     compileOnly("org.spigotmc", "spigot-api", "1.14.4-R0.1-SNAPSHOT")
-    compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.2.14")
+    compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.3.9")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.4")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.4")
 }
 
 spotless {
@@ -36,7 +35,9 @@ spotless {
 java {
     withSourcesJar()
     withJavadocJar()
-    sourceCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 publishData {
@@ -82,8 +83,10 @@ tasks {
     }
 
     shadowJar {
-        relocate("de.eldoria.eldoutilities", "de.eldoria.schematicbrush.libs.eldoutilities")
-        relocate("de.eldoria.messageblocker", "de.eldoria.schematicbrush.libs.messageblocker")
+        val shadebase = "de.eldoria.schematicbrush.libs."
+        relocate("de.eldoria.messageblocker", shadebase + "messageblocker")
+        relocate("com.jackson", shadebase + "jackson")
+        relocate("de.eldoria.eldoutilities", shadebase + "utilities")
         archiveBaseName.set("SchematicTools")
         mergeServiceFiles()
     }
@@ -97,6 +100,16 @@ tasks {
         println("Copying jar to $path")
         from(shadowJar)
         destinationDir = File(path.toString())
+    }
+
+    runServer {
+        minecraftVersion("1.21.1")
+        downloadPlugins {
+            url("https://ci.athion.net/job/FastAsyncWorldEdit/lastSuccessfulBuild/artifact/artifacts/FastAsyncWorldEdit-Paper-2.12.4-SNAPSHOT-1013.jar")
+            url("https://download.luckperms.net/1569/bukkit/loader/LuckPerms-Bukkit-5.4.152.jar")
+        }
+
+        jvmArgs("-Dcom.mojang.eula.agree=true")
     }
 
     build {

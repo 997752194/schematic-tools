@@ -37,10 +37,10 @@ public class Remove extends AdvancedCommand implements IPlayerTabExecutor {
     public void onCommand(@NotNull Player player, @NotNull String alias, @NotNull Arguments args) throws CommandException {
         args.parseQuoted();
         var tool = configuration.tools().byName(args.get(0).asString());
-        CommandAssertions.isTrue(tool.isPresent(), "Tool not found.");
+        CommandAssertions.isTrue(tool.isPresent(), "error.toolnotfound");
 
         configuration.tools().remove(tool.get());
-        messageSender().sendMessage(player, "Tool removed.");
+        messageSender().sendMessage(player, "commands.remove.removed");
     }
 
     @Override

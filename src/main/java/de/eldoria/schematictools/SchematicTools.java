@@ -7,6 +7,7 @@ package de.eldoria.schematictools;
 
 import de.eldoria.eldoutilities.config.template.PluginBaseConfiguration;
 import de.eldoria.eldoutilities.localization.ILocalizer;
+import de.eldoria.eldoutilities.localization.Localizer;
 import de.eldoria.eldoutilities.messages.MessageSender;
 import de.eldoria.eldoutilities.plugin.EldoPlugin;
 import de.eldoria.eldoutilities.updater.lynaupdater.LynaUpdateChecker;
@@ -28,15 +29,20 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class SchematicTools extends EldoPlugin {
-    private JacksonConfiguration configuration;
+    private JacksonConfiguration configuration = new JacksonConfiguration(this);
+
+    public Level getLogLevel() {
+        return configuration.secondary(PluginBaseConfiguration.KEY).logLevel();
+    }
 
     @Override
     public void onPluginEnable() throws Throwable {
         var sbr = SchematicBrushReborn.instance();
-        var messageSender = MessageSender.create(this, "§6[ST]");
+        var messageSender = MessageSender.builder(this).prefix("<gold>[ST]").register();
         var messageBlocker = MessageBlockerAPI.builder(this).addWhitelisted("[ST]").build();
-        ILocalizer.create(this, "en_US").setLocale("en_US");
-        configuration = new JacksonConfiguration(this);
+        Localizer.builder(this, "en_US")
+                .setIncludedLocales("en_US")
+                .build();
         PluginBaseConfiguration base = configuration.secondary(PluginBaseConfiguration.KEY);
         if (base.version() == 0) {
             var legacyConfiguration = new LegacyConfiguration(this);
