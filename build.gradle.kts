@@ -1,10 +1,9 @@
-import de.chojo.Repo
-
 plugins {
     id("com.diffplug.spotless") version "7.0.1"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "8.3.0"
     id("de.chojo.publishdata") version "1.4.0"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
+    id("xyz.jpenilla.run-paper") version "2.3.1"
     java
     `maven-publish`
 }
@@ -84,8 +83,10 @@ tasks {
     }
 
     shadowJar {
-        relocate("de.eldoria.eldoutilities", "de.eldoria.schematicbrush.libs.eldoutilities")
-        relocate("de.eldoria.messageblocker", "de.eldoria.schematicbrush.libs.messageblocker")
+        val shadebase = "de.eldoria.schematicbrush.libs."
+        relocate("de.eldoria.messageblocker", shadebase + "messageblocker")
+        relocate("com.jackson", shadebase + "jackson")
+        relocate("de.eldoria.eldoutilities", shadebase + "utilities")
         archiveBaseName.set("SchematicTools")
         mergeServiceFiles()
     }
@@ -99,6 +100,16 @@ tasks {
         println("Copying jar to $path")
         from(shadowJar)
         destinationDir = File(path.toString())
+    }
+
+    runServer {
+        minecraftVersion("1.21.1")
+        downloadPlugins {
+            url("https://ci.athion.net/job/FastAsyncWorldEdit/lastSuccessfulBuild/artifact/artifacts/FastAsyncWorldEdit-Paper-2.12.4-SNAPSHOT-1013.jar")
+            url("https://download.luckperms.net/1569/bukkit/loader/LuckPerms-Bukkit-5.4.152.jar")
+        }
+
+        jvmArgs("-Dcom.mojang.eula.agree=true")
     }
 
     build {

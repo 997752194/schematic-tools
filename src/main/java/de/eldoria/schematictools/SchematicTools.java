@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class SchematicTools extends EldoPlugin {
-    private JacksonConfiguration configuration;
+    private JacksonConfiguration configuration = new JacksonConfiguration(this);
 
     public Level getLogLevel() {
         return configuration.secondary(PluginBaseConfiguration.KEY).logLevel();
@@ -43,7 +43,6 @@ public class SchematicTools extends EldoPlugin {
         Localizer.builder(this, "en_US")
                 .setIncludedLocales("en_US")
                 .build();
-        configuration = new JacksonConfiguration(this);
         PluginBaseConfiguration base = configuration.secondary(PluginBaseConfiguration.KEY);
         if (base.version() == 0) {
             var legacyConfiguration = new LegacyConfiguration(this);
