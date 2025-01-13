@@ -28,7 +28,7 @@ public class BrushLoader {
         if (!brushContainer.isGlobalContainer() && args.flags().hasValue("o")) {
             var ownerArg = args.flags().get("o");
             var optOwner = playerByName(ownerArg.asString()).map(OfflinePlayer::getUniqueId).or(() -> getAsUUID(ownerArg.asString()));
-            CommandAssertions.isTrue(optOwner.isPresent(), "Could not determine owner.");
+            CommandAssertions.isTrue(optOwner.isPresent(), "error.noowner");
             owner = optOwner.get();
             brushContainer = storage.brushes().playerContainer(owner);
         }

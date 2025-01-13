@@ -5,7 +5,7 @@
  */
 package de.eldoria.schematictools.util;
 
-import de.eldoria.eldoutilities.utils.DataContainerUtil;
+import de.eldoria.eldoutilities.pdc.DataContainerUtil;
 import de.eldoria.schematictools.configuration.elements.Tool;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;

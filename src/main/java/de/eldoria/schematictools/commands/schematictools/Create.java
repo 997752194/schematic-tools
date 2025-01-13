@@ -5,6 +5,7 @@
  */
 package de.eldoria.schematictools.commands.schematictools;
 
+import de.eldoria.eldoutilities.commands.Completion;
 import de.eldoria.eldoutilities.commands.command.AdvancedCommand;
 import de.eldoria.eldoutilities.commands.command.CommandMeta;
 import de.eldoria.eldoutilities.commands.command.util.Arguments;
@@ -12,7 +13,6 @@ import de.eldoria.eldoutilities.commands.command.util.CommandAssertions;
 import de.eldoria.eldoutilities.commands.command.util.Input;
 import de.eldoria.eldoutilities.commands.exceptions.CommandException;
 import de.eldoria.eldoutilities.commands.executor.IPlayerTabExecutor;
-import de.eldoria.eldoutilities.simplecommands.TabCompleteUtil;
 import de.eldoria.eldoutilities.utils.Consumers;
 import de.eldoria.eldoutilities.utils.Futures;
 import de.eldoria.schematicbrush.SchematicBrushReborn;
@@ -37,13 +37,13 @@ public class Create extends AdvancedCommand implements IPlayerTabExecutor {
 
     public Create(Plugin plugin, SchematicBrushReborn sbr, Configuration configuration) {
         super(plugin, CommandMeta.builder("create")
-                .addUnlocalizedArgument("name", true)
-                .addUnlocalizedArgument("brush", true)
-                .addUnlocalizedArgument("-p permission.node", false)
-                .addUnlocalizedArgument("-u usages", false)
-                .addUnlocalizedArgument("-o owner", false)
-                .withPermission(Permissions.MANAGE)
-                .build());
+                                 .addUnlocalizedArgument("name", true)
+                                 .addUnlocalizedArgument("brush", true)
+                                 .addUnlocalizedArgument("-p permission.node", false)
+                                 .addUnlocalizedArgument("-u usages", false)
+                                 .addUnlocalizedArgument("-o owner", false)
+                                 .withPermission(Permissions.MANAGE)
+                                 .build());
         this.sbr = sbr;
         this.configuration = configuration;
     }
@@ -54,7 +54,7 @@ public class Create extends AdvancedCommand implements IPlayerTabExecutor {
         args.parseQuoted();
 
         var toolName = args.get(0).asString();
-        CommandAssertions.isFalse(configuration.tools().byName(toolName).isPresent(), "Name is already taken.");
+        CommandAssertions.isFalse(configuration.tools().byName(toolName).isPresent(), "error.nametaken");
 
         var brushName = args.get(1).asString();
         var storage = sbr.storageRegistry().activeStorage();
@@ -73,7 +73,7 @@ public class Create extends AdvancedCommand implements IPlayerTabExecutor {
             }
 
             configuration.tools().add(builder.build());
-            messageSender().sendMessage(player, "Tool created. You can bind it now.");
+            messageSender().sendMessage(player, "commands.create.created");
             configuration.save();
         }).whenComplete(Futures.whenComplete(Consumers.emptyConsumer(), err -> handleCommandError(player, err)));
     }
@@ -95,17 +95,17 @@ public class Create extends AdvancedCommand implements IPlayerTabExecutor {
         }
 
         if ("u".equalsIgnoreCase(args.flags().lastFlag())) {
-            return TabCompleteUtil.completeMinInt(args.flags().getIfPresent("u").map(Input::asString).orElse(""), 1);
+            return Completion.completeMinInt(args.flags().getIfPresent("u").map(Input::asString).orElse(""), 1);
         }
 
         if ("o".equalsIgnoreCase(args.flags().lastFlag())) {
-            return TabCompleteUtil.completePlayers(args.flags().getIfPresent("o").map(Input::asString).orElse(""));
+            return Completion.completePlayers(args.flags().getIfPresent("o").map(Input::asString).orElse(""));
         }
 
         if (args.sizeIs(1)) {
             var name = args.get(0).asString();
-            CommandAssertions.isFalse(configuration.tools().byName(name).isPresent(), "Name is already taken.");
-            return TabCompleteUtil.completeFreeInput(name, 32, "name");
+            CommandAssertions.isFalse(configuration.tools().byName(name).isPresent(), "error.nametaken");
+            return Completion.completeFreeInput(name, 32, "name");
         }
 
         if (args.sizeIs(2)) {
