@@ -21,7 +21,7 @@ dependencies {
     compileOnly("org.spigotmc", "spigot-api", "1.14.4-R0.1-SNAPSHOT")
     compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.3.14")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.13.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.13.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.2")
 }
 
