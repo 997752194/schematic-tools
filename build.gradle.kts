@@ -22,7 +22,7 @@ dependencies {
     compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.3.14")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.13.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.3")
 }
 
 spotless {
