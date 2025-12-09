@@ -17,8 +17,6 @@ import de.eldoria.schematictools.configuration.Configuration;
 import de.eldoria.schematictools.configuration.elements.Tool;
 import de.eldoria.schematictools.configuration.elements.Tools;
 import de.eldoria.schematictools.util.Permissions;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -30,8 +28,6 @@ public class List extends AdvancedCommand implements IPlayerTabExecutor {
     public final int PAGE_SIZE = 15;
     public final String RIGHT_ARROW = "»»»";
     public final String LEFT_ARROW = "«««";
-    private final BukkitAudiences audiences;
-    private final MiniMessage miniMessage = MiniMessage.miniMessage();
     private final MessageBlocker messageBlocker;
     private final Configuration configuration;
 
@@ -39,7 +35,6 @@ public class List extends AdvancedCommand implements IPlayerTabExecutor {
         super(plugin, CommandMeta.builder("list")
                 .withPermission(Permissions.LIST)
                 .build());
-        audiences = BukkitAudiences.builder(plugin).build();
         this.messageBlocker = messageBlocker;
         this.configuration = configuration;
     }
@@ -85,6 +80,6 @@ public class List extends AdvancedCommand implements IPlayerTabExecutor {
         messageBlocker.blockPlayer(player);
         messageBlocker.ifEnabled(() -> composer.newLine().text("<click:run_command:'/schematictools chatblock false'><%s>[x]</click>", Colors.REMOVE));
         messageBlocker.announce(player, "[x]");
-        audiences.sender(player).sendMessage(miniMessage.deserialize(composer.build()));
+        messageSender().sendMessage(player, composer.build());
     }
 }

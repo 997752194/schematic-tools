@@ -1,5 +1,5 @@
 plugins {
-    id("com.diffplug.spotless") version "7.0.1"
+    id("com.diffplug.spotless") version "7.2.1"
     id("com.gradleup.shadow") version "8.3.5"
     id("de.chojo.publishdata") version "1.4.0"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "de.eldoria"
-version = "1.1.1"
+version = "1.1.2"
 
 repositories {
     maven("https://eldonexus.de/repository/maven-public/")
@@ -19,10 +19,10 @@ repositories {
 dependencies {
     compileOnly("de.eldoria", "schematicbrushreborn-api", "2.7.3")
     compileOnly("org.spigotmc", "spigot-api", "1.14.4-R0.1-SNAPSHOT")
-    compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.3.9")
+    compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.3.15")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.4")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.4")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.13.4")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.4")
 }
 
 spotless {
@@ -85,28 +85,18 @@ tasks {
     shadowJar {
         val shadebase = "de.eldoria.schematicbrush.libs."
         relocate("de.eldoria.messageblocker", shadebase + "messageblocker")
-        relocate("com.jackson", shadebase + "jackson")
+        relocate("com.fasterxml", shadebase + "fasterxml")
+        relocate("de.eldoria.jacksonbukkit", shadebase + "jacksonbukkit")
         relocate("de.eldoria.eldoutilities", shadebase + "utilities")
         archiveBaseName.set("SchematicTools")
         mergeServiceFiles()
     }
 
-    register<Copy>("copyToServer") {
-        val path = project.property("targetDir") ?: "";
-        if (path.toString().isEmpty()) {
-            println("targetDir is not set in gradle properties")
-            return@register
-        }
-        println("Copying jar to $path")
-        from(shadowJar)
-        destinationDir = File(path.toString())
-    }
-
     runServer {
         minecraftVersion("1.21.1")
         downloadPlugins {
-            url("https://ci.athion.net/job/FastAsyncWorldEdit/lastSuccessfulBuild/artifact/artifacts/FastAsyncWorldEdit-Paper-2.12.4-SNAPSHOT-1013.jar")
-            url("https://download.luckperms.net/1569/bukkit/loader/LuckPerms-Bukkit-5.4.152.jar")
+            url("https://ci.athion.net/job/FastAsyncWorldEdit/1129/artifact/artifacts/FastAsyncWorldEdit-Bukkit-2.13.1-SNAPSHOT-1129.jar")
+            url("https://download.luckperms.net/1594/bukkit/loader/LuckPerms-Bukkit-5.5.9.jar")
         }
 
         jvmArgs("-Dcom.mojang.eula.agree=true")
