@@ -1,0 +1,36 @@
+C:\Users\Administrator\Desktop\schematic-tools目录下是minecraft paper服务端插件源码
+请给插件添加新功能，新增功能可以调用尽量不要直接修改原本方法，方便原项目更新后此项目同步更新
+构建需要的环境已经解压到下列路径
+C:\gradle-9.2.1
+C:\zulu21.52.203
+C:\Program Files\Zulu\zulu-25
+构建后手动验证即可
+修改需求：
+
+
+
+I18n 与 eldoutilities Localizer
+
+
+先分析配置选项对应的意义
+\plugins\SchematicBrushReborn\presets.yml
+\plugins\SchematicBrushReborn\brushes.yml
+
+单文件配置生成工具html，采用原生js+bootstrap5，
+1.顶部标题栏最右侧有选择文件夹按钮，选择\plugins所在路径，自动读取下列路径文件内所有文件
+\plugins\FastAsyncWorldEdit\schematics\
+\plugins\WorldEdit\schematics\
+\plugins\SchematicBrushReborn\
+\plugins\SchematicToolsFork\
+2.页面左侧伸缩栏按照 FastAsyncWorldEdit /WorldEdit显示已有的schematics名称列表
+3.页面主题区域用于根据schematics生成配置，
+4.点击schematics名称选项，右侧出现生成配置所需的表单
+5.
+SBR.presets表单内容对应生成\plugins\SchematicBrushReborn\presets.yml
+SBR.brushes表单内容对应生成\plugins\SchematicBrushReborn\brushes.yml
+SBT.tools表单内容对应生成\plugins\SchematicToolsFork\tools.yml
+
+6.表单内容如下
+SBR.presets部分
+预设名称: 输入框，默认值为schematics名称
+描述: 输入框，默认值为none
